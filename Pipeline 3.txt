@@ -1,0 +1,54 @@
+pipeline
+{
+	agent any
+
+	parameters
+	{
+		string(name: 'action', defaultValue: 'closed', description: 'The action to take')
+	}
+
+	stages
+	{
+		stage('Action')
+		{
+            	parallel
+			{
+                		stage('Branch 1')
+				{
+                    		steps
+					{
+                        		script
+						{
+                            			if ("${params.action}" == "closed")
+							{
+                                			build job: 'Pipeline 1', parameters: []
+                            			}
+							else
+							{
+                                			echo "Opened"
+                            			}
+                        		}
+                    		}
+                		}
+
+				stage('Branch 2')
+				{
+            			steps
+					{
+                  			script
+						{
+                  				if ("${params.action}" == "closed")
+							{
+                        				build job: 'Pipeline 2', parameters: []
+                        			}
+							else
+							{
+                        				echo "Opened"
+                        			}
+                   			}
+                    		}
+                		}
+            	}
+        	}
+    	}
+}

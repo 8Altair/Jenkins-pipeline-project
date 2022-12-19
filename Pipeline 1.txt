@@ -1,0 +1,32 @@
+pipeline
+{
+    agent any
+    
+    tools
+    {
+        maven "MavenTool"
+    }
+
+    stages
+    {
+         stage('Cloning')
+        {
+            steps
+            {
+                script
+                {
+                    checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/8Altair/Balloon_problem']]])
+                }
+            }
+        }
+        
+        stage('Command')
+        {
+            steps
+            {
+                sh "mvn clean install"
+                build 'ImagePipeline'
+            }
+        }
+    }
+}
